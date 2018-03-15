@@ -1,6 +1,9 @@
 //
 // utils
 //
+
+const VALID_TESTS = /(webconsole)|(netmonitor)|(jsdebugger)|(inspector)/;
+
 function fetchData(version) {
     return fetch(`data/local.${version}.json`)
         .then((response) => {
@@ -8,13 +11,15 @@ function fetchData(version) {
             return response.json()
         })
         .then((raw) => {
-            return raw.suites[0].subtests.map((x) => {
-                return {
-                    name: x.name,
-                    result: {
-                        lowerIsBetter: x.lowerIsBetter,
-                        unit: x.unit,
-                        value: x.value
+            return raw.suites[0].subtests
+                .filter((x) => VALID_TESTS.test(x.name))
+                .map((x) => {
+                    return {
+                        name: x.name,
+                        result: {
+                            lowerIsBetter: x.lowerIsBetter,
+                            unit: x.unit,
+                            value: x.value
                     }
                 }
             });
@@ -31,14 +36,6 @@ Vue.filter('round', function(value, decimals) {
   return Number(Math.round(value * Math.pow(10, decimals)) / Math.pow(10, decimals)).toLocaleString();
 });
 
-// Vue.filter('percentage', function(value, decimals) {
-//     if(!value) { value = 0; }
-//     if(!decimals) { decimals = 0; }
-  
-//     Math.round(value * 100 * Math.pow(10, decimals)) / Math.pow(10, decimals);
-//     value = value + '%';
-//     return value;
-//   });
 
 //
 // components

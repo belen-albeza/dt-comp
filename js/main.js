@@ -2,6 +2,7 @@
 // utils
 //
 
+const VERSIONS = {src: 57, dst: 60};
 const VALID_TESTS = /(webconsole)|(netmonitor)|(jsdebugger)|(inspector)/;
 
 function fetchData(version) {
@@ -57,7 +58,11 @@ Vue.component('test', {
     }
 });
 
-const VERSIONS = {src: 57, dst: 60};
+Vue.component('suite', {
+    template: '#suite-template',
+    props: ['name', 'tests']
+});
+
 
 Vue.component('dashboard', {
     template: '#dashboard-template',
@@ -98,6 +103,18 @@ Vue.component('dashboard', {
                         }
                     }
                 });
+        },
+        groupedTests: function () {
+            let res = {};
+            this.tests.forEach((x) => {
+                let panel = x.name.match(VALID_TESTS)[0];
+                if (!(panel in res)) {
+                    res[panel] = [];
+                }  
+                res[panel].push(x);
+            });
+
+            return res;
         }
     }
 });

@@ -6,8 +6,6 @@
     <script src="js/vue.js"></script>
     <script src="js/main.js"></script>
     <style>
-        .worse { color: red; }
-        .better { color: green; }
         table {
             border-collapse: collapse;
         }
@@ -17,6 +15,18 @@
         td, th {
             border: 1px solid black;
             padding: 0.5ch;
+        }
+        
+        .worse { color: red; }
+        .better { color: green; }
+
+        .suite > h1 {
+            border-bottom: 1px solid black;
+            font-size: 2em;
+        }
+        .note {
+            font-size: small;
+            font-style: italic;
         }
     </style>
 </head>
@@ -34,7 +44,7 @@
     </footer>
 
     <script type="text/x-template" id="test-template">
-        <article>
+        <section>
             <h1><code>{{name}}</code></h1>
             <table>
                 <tr><th>{{src.version}}</th><th>{{dst.version}}</th><th>Delta</th></tr>
@@ -45,12 +55,19 @@
                 </tr>
             </table>
             <p class="note"><template v-if="src.test.lowerIsBetter">Lower is better</template><template v-else>Higher is better</template></p>
+        </section>
+    </script>
+
+    <script type="text/x-template" id="suite-template">
+        <article class="suite">
+            <h1><code>{{name}}</code></h1>
+            <test v-for="test in tests" :key="test.name" :name="test.name" :src="test.src" :dst="test.dst" />
         </article>
     </script>
 
     <script type="text/x-template" id="dashboard-template">
         <article>
-            <test v-for="test in tests" :name="test.name" :src="test.src" :dst="test.dst" />
+            <suite v-for="(tests, name) in groupedTests" :key="name" :name="name" :tests="tests" />
         </article>
     </script>
 </body>

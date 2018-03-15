@@ -4,6 +4,7 @@
 
 const VERSIONS = {src: 57, dst: 60};
 const VALID_TESTS = /(webconsole)|(netmonitor)|(jsdebugger)|(inspector)/;
+const INVALID_TESTS = /(settle)/;
 
 function fetchData(version) {
     return fetch(`data/local.${version}.json`)
@@ -13,7 +14,7 @@ function fetchData(version) {
         })
         .then((raw) => {
             return raw.suites[0].subtests
-                .filter((x) => VALID_TESTS.test(x.name))
+                .filter((x) => VALID_TESTS.test(x.name) && !INVALID_TESTS.test(x.name))
                 .map((x) => {
                     return {
                         name: x.name,

@@ -2,7 +2,7 @@
 // utils
 //
 function fetchData(version) {
-    return fetch(`../data/local.${version}.json`)
+    return fetch(`data/local.${version}.json`)
         .then((response) => {
             if (!response.ok) { throw new Error(response.statusText); }
             return response.json()

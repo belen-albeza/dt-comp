@@ -1,0 +1,47 @@
+<!doctype html>
+<head>
+    <title>Firefox Devtools 57 vs 60 - Performance comparison</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <script src="js/vue.js"></script>
+    <script src="js/main.js"></script>
+    <style>
+        .worse { color: red; }
+        .better { color: green; }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>Firefox Devtools 57 vs 58</h1>
+    </header>
+    <main id="app">
+        <dashboard></dashboard>
+    </main>
+    <footer>
+        <hr>
+        <p>With love,<br>
+        the devtools fairies.</p>
+    </footer>
+
+    <script type="text/x-template" id="test-template">
+        <article>
+            <h1><code>{{name}}</code></h1>
+            <table>
+                <tr><th>{{src.version}}</th><th>{{dst.version}}</th><th>Delta</th></tr>
+                <tr>
+                    <td>{{src.test.value | round(2)}} {{src.test.unit}}</td>
+                    <td>{{dst.test.value | round(2)}} {{dst.test.unit}}</td>
+                    <td :class="isBetter ? 'better' : 'worse'"><template v-if="delta >= 0">+</template>{{delta * 100 | round(2)}}%</td>
+                </tr>
+            </table>
+            <p class="note"><template v-if="src.test.lowerIsBetter">Lower is better</template><template v-else>Higher is better</template></p>
+        </article>
+    </script>
+
+    <script type="text/x-template" id="dashboard-template">
+        <article>
+            <test v-for="test in tests" :name="test.name" :src="test.src" :dst="test.dst" />
+        </article>
+    </script>
+</body>
+
